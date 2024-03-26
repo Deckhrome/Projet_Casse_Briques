@@ -1,6 +1,6 @@
 CC := g++
-CFLAGS := -Wall -Wextra -Iinclude -std=c++11 `pkg-config --cflags gtk+-3.0`
-LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system `pkg-config --libs gtk+-3.0`
+CFLAGS := -Wall -Wextra -Iinclude -std=c++11
+LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system -lSDL2 -lSDL2_ttf
 
 SRC_DIR := src
 BUILD_DIR := build
