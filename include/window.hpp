@@ -1,5 +1,5 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#ifndef WINDOW_HPP
+#define WINDOW_HPP
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -8,10 +8,10 @@
 #include <string>
 #include <iostream>
 
-class GameWindow
+class Window
 {
 public:
-    GameWindow(int width, int height) : m_width(width), m_height(height){
+    Window(int width, int height) : m_width(width), m_height(height){
         CHK(SDL_Init(SDL_INIT_VIDEO) == 0);
 
         m_window = SDL_CreateWindow("Bricks Breaker",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,width,height,SDL_WINDOW_SHOWN);
@@ -20,7 +20,7 @@ public:
         m_renderer = SDL_CreateRenderer(m_window,-1,SDL_RENDERER_ACCELERATED);
         CHK(m_renderer != nullptr);
     }
-    ~GameWindow(){
+    ~Window(){
         if (m_renderer) SDL_DestroyRenderer(m_renderer);
         if (m_window) SDL_DestroyWindow(m_window);
         SDL_Quit();
