@@ -1,29 +1,34 @@
 #include <cmath>
+#include <math.h>
 #include "../include/ball.hpp"
 #include "../include/colours.hpp"
 
-#define VELOCITY_X 300
-#define VELOCITY_Y 400
+#define VELOCITY 400
+#define RANGE_ANGLE 4
 
-
-Ball::Ball(int radius, int initialX, int initialY, int screenWidth, int screenHeight,std::unique_ptr<Paddle> paddle) :
+Ball::Ball(int radius, int initialX, int initialY, int screenWidth, int screenHeight) :
     m_radius(radius),
     m_x(initialX),
     m_y(initialY),
-    m_velocityX(VELOCITY_X),
-    m_velocityY(VELOCITY_Y),
+    m_velocity(VELOCITY),
+    m_velocityX(m_velocity*cos(M_PI/4)),
+    m_velocityY(-m_velocity*sin(M_PI/4)),
     m_screenWidth(screenWidth),
-    m_screenHeight(screenHeight),
-    m_paddle(std::move(paddle)) {}
+    m_screenHeight(screenHeight) {}
 
-void Ball::update(float deltaTime) {
+void Ball::update(float deltaTime, Paddle * paddle) {
     m_x += static_cast<int>(m_velocityX * deltaTime);
     m_y += static_cast<int>(m_velocityY * deltaTime);
     // Handle collision
     handleCollisionsBorder(m_screenWidth, m_screenHeight);
-    handleCollisionsPaddle();
+    handleCollisionsPaddle(*paddle);
 }
 
+void Ball::handleInput(SDL_Event& event){
+    if(event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_SPACE){
+        this->reset();
+    }
+}
 
 void drawCircle(SDL_Renderer* renderer, int centerX, int centerY, int radius) {
     for (int x = -radius; x <= radius; ++x) {
@@ -37,16 +42,28 @@ void Ball::draw(SDL_Renderer* renderer) const {
     drawCircle(renderer, m_x, m_y, m_radius);
 }
 
-void Ball::handleCollisionsPaddle() {
-    if (m_x + m_radius >= m_paddle->getX() && m_x - m_radius <= m_paddle->getX() + m_paddle->getWidth() &&
-        m_y + m_radius >= m_paddle->getY() && m_y - m_radius <= m_paddle->getY() + m_paddle->getHeight()) {
-        // La balle est en collision avec le paddle
+void Ball::handleCollisionsPaddle(Paddle paddle) {
+    if (m_x + m_radius >= paddle.getX() && m_x - m_radius <= paddle.getX() + paddle.getWidth() &&
+        m_y + m_radius >= paddle.getY() && m_y - m_radius <= paddle.getY() + (paddle.getHeight()/2)) {
+        // Collision
 
-        // Inverser la direction verticale pour simuler le rebond
-        m_velocityY = -m_velocityY;
+        // Change direction depending on where it hits
+        double ratioCollision = static_cast<double>(m_x - (paddle.getX() + paddle.getWidth() / 2)) / static_cast<double>(paddle.getWidth() / 2);
+        printf("ratio : %f\n",ratioCollision);
+        double angle = (abs(ratioCollision)) * (M_PI / 3); // Reduce de range of the angle possible
 
+        printf("angle sortie : %f\n",(angle*180)/M_PI);
+        if(ratioCollision < 0){
+            m_velocityX = -m_velocity*sin(angle);
+            m_velocityY = -m_velocity*cos(angle);
+        }
+        else{
+            m_velocityX = m_velocity*sin(angle);
+            m_velocityY = -m_velocity*cos(angle);
+        }
+ 
         // Déplacer la balle juste au-dessus du paddle pour éviter une collision répétée
-        m_y = m_paddle->getY() - m_radius;
+        m_y = paddle.getY() - m_radius -1;
     }
 }
 
@@ -69,8 +86,8 @@ void Ball::handleCollisionsBorder(int windowWidth, int windowHeight) {
         m_velocityY = -m_velocityY; 
     } else if (m_y + m_radius > windowHeight) {
         // Bottom
-        m_y = windowHeight - m_radius;
-        m_velocityY = -m_velocityY; 
+        //reset for now
+        this->reset();
         }
     }
 
@@ -79,6 +96,6 @@ void Ball::reset() {
     // reset position and velocity
     m_x = m_screenWidth / 2;
     m_y = m_screenHeight / 2;
-    m_velocityX = VELOCITY_X;
-    m_velocityY = VELOCITY_Y;
+    m_velocityX = m_velocity*cos(M_PI/4);
+    m_velocityY = m_velocity*sin(M_PI/4);
 }

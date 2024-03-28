@@ -13,7 +13,7 @@ public:
     Game(int screenWidth, int screenHeight, int paddleWidth, int paddleHeight, int ball_radius) :
         m_window(screenWidth, screenHeight),
         m_paddle((screenWidth - paddleWidth) / 2, screenHeight - 100, paddleWidth, paddleHeight, screenWidth),
-        m_ball(ball_radius, screenWidth/2, screenHeight/2, screenWidth, screenHeight, std::make_unique<Paddle>((screenWidth - paddleWidth) / 2, screenHeight - 100, paddleWidth, paddleHeight, screenWidth)) {}
+        m_ball(ball_radius, screenWidth/2, screenHeight/2, screenWidth, screenHeight) {}
     void run();
     void draw(SDL_Renderer * renderer);
 

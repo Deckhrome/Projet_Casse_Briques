@@ -10,10 +10,11 @@ void Game::run() {
                 running = false;
             }
             m_paddle.handleInput(event);
+            m_ball.handleInput(event);
         }
 
         m_paddle.update(1.0f / 60);
-        m_ball.update(1.0f / 60);
+        m_ball.update(1.0f / 60, &m_paddle);
 
         m_window.clear();
 

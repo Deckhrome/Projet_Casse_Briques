@@ -1,21 +1,20 @@
 #ifndef PADDLE_HPP
 #define PADDLE_HPP
 
-#include "gameObject.hpp"
+#include "SDL2/SDL.h"
 
-class Paddle : public GameObject
-{
+class Paddle {
 public:
     // Constructor
     Paddle(int x, int y,int width, int height, int screenWidth) :
     m_x(x), m_y(y), m_width(width), m_height(height), m_screenWidth(screenWidth), m_velocity(0) {}
     ~Paddle(){}
     // Update
-    void update(float deltaTime) override;
+    void update(float deltaTime);
     // Draw
-    void draw(SDL_Renderer * renderer) const override;
+    void draw(SDL_Renderer * renderer) const;
     // handleInput
-    void handleInput(SDL_Event& event) override;
+    void handleInput(SDL_Event& event);
     // Getters
     int getWidth() const {return m_width;}
     int getHeight() const {return m_height;}
