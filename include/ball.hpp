@@ -2,6 +2,7 @@
 #define BALL_HPP
 
 #include "paddle.hpp"
+#include "bricks.hpp"
 #include <memory> // Inclure la bibliothèque pour std::unique_ptr
 
 class Ball {
@@ -10,13 +11,14 @@ public:
     Ball(int radius, int initialX, int initialY, int screenWidth, int screenHeight);
 
     // Méthodes héritées de GameObject
-    void update(float deltaTime, Paddle * paddle);
-    void draw(SDL_Renderer* renderer) const ;
+    void update(float deltaTime, Paddle paddle, Bricks& bricks);
+    void drawBall(SDL_Renderer* renderer) const ;
     void handleInput(SDL_Event& event);
 
-    // Handle every type of collision (window for now)
+    // Handle every type of collision
     void handleCollisionsBorder(int windowWidth, int windowHeight);
     void handleCollisionsPaddle(Paddle paddle);
+    void handleCollisionsBricks(Bricks& bricks); 
 
     // Getter
     int getX() const { return m_x; }

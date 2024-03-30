@@ -1,5 +1,5 @@
 #include "../include/paddle.hpp"
-#include "../include/colours.hpp"
+#include "../include/colour.hpp"
 
 void Paddle::handleInput(SDL_Event& event)  {
     switch(event.type) {
@@ -42,7 +42,7 @@ void Paddle::handleInput(SDL_Event& event)  {
     }
 }
 
-void Paddle::draw(SDL_Renderer * renderer) const {
+void Paddle::drawPaddle(SDL_Renderer * renderer) const {
         SDL_Rect rect = {m_x,m_y,m_width,m_height};
         SDL_SetRenderDrawColor(renderer,Colours::White.r,Colours::White.g,Colours::White.b,Colours::White.a);
         SDL_RenderFillRect(renderer, &rect);

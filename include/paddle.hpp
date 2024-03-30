@@ -12,7 +12,7 @@ public:
     // Update
     void update(float deltaTime);
     // Draw
-    void draw(SDL_Renderer * renderer) const;
+    void drawPaddle(SDL_Renderer * renderer) const;
     // handleInput
     void handleInput(SDL_Event& event);
     // Getters

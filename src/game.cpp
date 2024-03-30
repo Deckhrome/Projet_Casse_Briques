@@ -9,16 +9,14 @@ void Game::run() {
             if (event.type == SDL_QUIT) {
                 running = false;
             }
-            m_paddle.handleInput(event);
-            m_ball.handleInput(event);
+            this->handleInput(event);
         }
 
-        m_paddle.update(1.0f / 60);
-        m_ball.update(1.0f / 60, &m_paddle);
+        this->update();
 
         m_window.clear();
 
-        draw(m_window.getRenderer());
+        this->draw(m_window.getRenderer());
         
         m_window.display();
 
@@ -27,6 +25,17 @@ void Game::run() {
 }
 
 void Game::draw(SDL_Renderer * renderer) {
-    m_paddle.draw(renderer);
-    m_ball.draw(renderer);
+    m_paddle.drawPaddle(renderer);
+    m_ball.drawBall(renderer);
+    m_bricks.drawBricks(renderer);
 }
+void Game::update(){
+    m_paddle.update(1.0f / 60);
+    m_ball.update(1.0f / 60, m_paddle, m_bricks);
+}
+
+void Game::handleInput(SDL_Event event){
+    m_paddle.handleInput(event);
+    m_ball.handleInput(event);
+}
+
