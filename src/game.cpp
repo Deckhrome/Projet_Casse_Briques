@@ -41,7 +41,7 @@ void Game::run()
 void Game::renderMenu()
 {
     m_window.clear();
-    m_menu.drawLevelButtons();
+    m_menu.drawNumberedButtons();
     m_window.display();
 }
 
@@ -57,6 +57,9 @@ void Game::renderLevel(Level currentLevel)
 
         break;
     case Level::LEVEL_3:
+
+        break;
+    case Level::DEFAULT_LEVEL:
 
         break;
     }
@@ -89,5 +92,33 @@ void Game::handleLevelInput(SDL_Event event)
 
 void Game::handleMenuInput(SDL_Event event)
 {
-    (void)event;
+    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
+    {
+        int mouseX = event.button.x;
+        int mouseY = event.button.y;
+
+        for (const auto &button : m_menu.getLevelButtons())
+        {
+            if (mouseX >= button.rect.x && mouseX <= button.rect.x + button.rect.w &&
+                mouseY >= button.rect.y && mouseY <= button.rect.y + button.rect.h)
+            {
+                m_gameState = GameState::LEVEL;
+                switch (button.number)
+                {
+                case 1:
+                    m_level = Level::LEVEL_1;
+                    break;
+                case 2:
+                    m_level = Level::LEVEL_2;
+                    break;
+                case 3:
+                    m_level = Level::LEVEL_3;
+                    break;
+                // Ajoutez d'autres cas selon vos besoins
+                default:
+                    break;
+                };
+            }
+        }
+    }
 }

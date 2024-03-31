@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <map>
 #include "window.hpp"
 #include "paddle.hpp"
 #include "bricks.hpp"
@@ -17,6 +18,7 @@ enum class GameState
 
 enum class Level
 {
+    DEFAULT_LEVEL,
     LEVEL_1,
     LEVEL_2,
     LEVEL_3
@@ -31,7 +33,7 @@ public:
                                                                                                   m_bricks(2, 4, screenWidth, screenHeight),
                                                                                                   m_gameState(GameState::MENU),
                                                                                                   m_level(Level::LEVEL_1),
-                                                                                                  m_menu(m_window.getRenderer(), screenWidth, screenHeight, m_window.getTexture())
+                                                                                                  m_menu(m_window.getRenderer(), screenWidth, screenHeight, m_window.getTexture(), m_window.getFont())
 
     {
         m_menu.initMenu();
