@@ -1,10 +1,16 @@
 #include "../include/paddle.hpp"
 #include "../include/colour.hpp"
 
-void Paddle::handleInput(SDL_Event &event)
+void Paddle::handleInput(SDL_Event &event, int screenWidth)
 {
     switch (event.type)
     {
+    case SDL_MOUSEMOTION:
+        if (event.motion.x >= 0 && event.motion.x < screenWidth)
+        {
+            m_x = event.motion.x - m_width / 2;
+        }
+        break;
     case SDL_KEYDOWN:
         switch (event.key.keysym.sym)
         {

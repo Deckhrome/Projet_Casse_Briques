@@ -4,7 +4,7 @@
 
 void Bricks::initBricks(int rows, int cols, int width, int height)
 {
-    int padding = 20;
+    int padding = 4;
 
     int brickWidth = (width - (cols + 1) * padding) / cols;
     int brickHeight = (height - (rows + 1) * padding) / rows;

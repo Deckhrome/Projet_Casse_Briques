@@ -14,7 +14,7 @@ public:
     // Draw
     void drawPaddle(SDL_Renderer *renderer) const;
     // handleInput
-    void handleInput(SDL_Event &event);
+    void handleInput(SDL_Event &event, int screenWidth);
     // Getters
     int getWidth() const { return m_width; }
     int getHeight() const { return m_height; }
