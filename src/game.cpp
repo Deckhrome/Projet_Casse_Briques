@@ -107,12 +107,15 @@ void Game::handleMenuInput(SDL_Event event)
                 {
                 case 1:
                     m_level = Level::LEVEL_1;
+                    this->m_bricks.initWithFile("data/Level/level1.1");
                     break;
                 case 2:
                     m_level = Level::LEVEL_2;
+                    this->m_bricks.initWithFile("data/Level/level1.1");
                     break;
                 case 3:
                     m_level = Level::LEVEL_3;
+                    this->m_bricks.initWithFile("data/Level/level1.1");
                     break;
                 // Ajoutez d'autres cas selon vos besoins
                 default:

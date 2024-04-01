@@ -43,27 +43,27 @@ protected:
     {
         if (m_durability > 90)
         {
-            return Colours::Red; // Rouge
+            return Colours::Blue; // Rouge
         }
         else if (m_durability > 70)
         {
-            return Colours::Orange; // Orange
+            return Colours::Cyan; // Orange
         }
         else if (m_durability > 50)
         {
-            return Colours::Yellow; // Jaune
+            return Colours::Green; // Jaune
         }
         else if (m_durability > 30)
         {
-            return Colours::Green; // Vert
+            return Colours::Yellow; // Vert
         }
         else if (m_durability > 10)
         {
-            return Colours::Cyan; // Cyan
+            return Colours::Orange; // Cyan
         }
         else
         {
-            return Colours::Blue; // Bleu
+            return Colours::Red; // Bleu
         }
     }
 };

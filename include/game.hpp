@@ -30,7 +30,7 @@ public:
     Game(int screenWidth, int screenHeight, int paddleWidth, int paddleHeight, int ball_radius) : m_window(screenWidth, screenHeight),
                                                                                                   m_paddle((screenWidth - paddleWidth) / 2, screenHeight - 100, paddleWidth, paddleHeight, screenWidth),
                                                                                                   m_ball(ball_radius, screenWidth / 2, screenHeight / 2, screenWidth, screenHeight),
-                                                                                                  m_bricks(2, 4, screenWidth, screenHeight),
+                                                                                                  m_bricks(screenWidth, screenHeight, 4),
                                                                                                   m_gameState(GameState::MENU),
                                                                                                   m_level(Level::LEVEL_1),
                                                                                                   m_menu(m_window.getRenderer(), screenWidth, screenHeight, m_window.getTexture(), m_window.getFont())
