@@ -22,8 +22,6 @@ public:
 
     // Init with ASCII file
     void initWithFile(const std::string path);
-    // Init with rectangle brick
-    void initBricks(int rows, int cols, int width, int height);
     // Calculate brick width and height
     void initBrickWidthAndHeight(std::ifstream &file);
     // Add brick
@@ -46,6 +44,7 @@ public:
     // Reset
     void resetBricks()
     {
+        m_all_bricks.clear();
     }
 
     // Remove brick

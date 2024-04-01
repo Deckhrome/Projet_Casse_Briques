@@ -41,29 +41,21 @@ protected:
     // Colour depending on the durability
     SDL_Color getColour() const
     {
-        if (m_durability > 90)
+        if (m_durability > 50)
         {
-            return Colours::Blue; // Rouge
-        }
-        else if (m_durability > 70)
-        {
-            return Colours::Cyan; // Orange
-        }
-        else if (m_durability > 50)
-        {
-            return Colours::Green; // Jaune
+            return Colours::Green;
         }
         else if (m_durability > 30)
         {
-            return Colours::Yellow; // Vert
+            return Colours::Yellow;
         }
         else if (m_durability > 10)
         {
-            return Colours::Orange; // Cyan
+            return Colours::Orange;
         }
         else
         {
-            return Colours::Red; // Bleu
+            return Colours::Red;
         }
     }
 };

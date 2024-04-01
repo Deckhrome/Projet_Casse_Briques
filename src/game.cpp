@@ -5,8 +5,16 @@ void Game::run()
     bool running = true;
     SDL_Event event;
 
+    // Temps écoulé depuis le début de la boucle de jeu
+    Uint32 lastFrameTime = SDL_GetTicks();
+
     while (running)
     {
+        Uint32 currentTime = SDL_GetTicks();
+        float deltaTime = (currentTime - lastFrameTime) / 1000.0f; // Second
+
+        lastFrameTime = currentTime;
+
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
@@ -15,7 +23,6 @@ void Game::run()
             }
             else
             {
-                // We're in the menu
                 if (m_gameState == GameState::MENU)
                 {
                     handleMenuInput(event);
@@ -26,15 +33,18 @@ void Game::run()
                 }
             }
         }
+
+        // Rendu en fonction de l'état du jeu
         if (m_gameState == GameState::MENU)
         {
             renderMenu();
         }
         else if (m_gameState == GameState::LEVEL)
         {
-            renderLevel(m_level);
+            renderLevel(m_level, deltaTime);
         }
-        SDL_Delay(1000 / 60);
+
+        SDL_Delay(1000 / 60); // Limiter à environ 60 FPS
     }
 }
 
@@ -45,12 +55,12 @@ void Game::renderMenu()
     m_window.display();
 }
 
-void Game::renderLevel(Level currentLevel)
+void Game::renderLevel(Level currentLevel, float deltaTime)
 {
     switch (currentLevel)
     {
     case Level::LEVEL_1:
-        this->update();
+        this->update(deltaTime);
         this->render();
         break;
     case Level::LEVEL_2:
@@ -78,14 +88,23 @@ void Game::drawLevel(SDL_Renderer *renderer)
     m_ball.drawBall(renderer);
     m_bricks.drawBricks(renderer);
 }
-void Game::update()
+void Game::update(float deltaTime)
 {
-    m_paddle.update(1.0f / 60);
-    m_ball.update(1.0f / 60, m_paddle, m_bricks);
+    m_paddle.update(deltaTime);
+    m_ball.update(deltaTime, m_paddle, m_bricks);
 }
 
 void Game::handleLevelInput(SDL_Event event)
 {
+    if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
+    {
+        m_gameState = GameState::MENU;
+        // reset
+        m_ball.reset();
+        m_paddle.reset();
+        m_bricks.resetBricks();
+        return;
+    }
     m_paddle.handleInput(event, m_window.getWidth());
     m_ball.handleInput(event);
 }
@@ -117,7 +136,6 @@ void Game::handleMenuInput(SDL_Event event)
                     m_level = Level::LEVEL_3;
                     this->m_bricks.initWithFile("data/Level/level1.1");
                     break;
-                // Ajoutez d'autres cas selon vos besoins
                 default:
                     break;
                 };
