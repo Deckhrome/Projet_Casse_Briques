@@ -7,7 +7,7 @@ class Paddle
 {
 public:
     // Constructor
-    Paddle(int x, int y, int width, int height, int screenWidth) : m_x(x), m_y(y), m_width(width), m_height(height), m_screenWidth(screenWidth), m_velocity(0) {}
+    Paddle(int x, int y, int width, int height, int screenWidth, int screenHeight) : m_x(x), m_y(y), m_width(width), m_height(height), m_screenWidth(screenWidth), m_screenHeight(screenHeight), m_velocity(0) {}
     ~Paddle() {}
     // Update
     void update(float deltaTime);
@@ -20,13 +20,16 @@ public:
     int getHeight() const { return m_height; }
     int getX() const { return m_x; }
     int getY() const { return m_y; }
+    // Reset position
+    void reset();
 
 private:
     int m_x;
     int m_y;
     int m_width;
     int m_height;
-    int m_screenWidth; // to know the screen limit
+    int m_screenWidth;
+    int m_screenHeight;
     int m_velocity;
 
     static constexpr int PADDLE_SPEED = 300;

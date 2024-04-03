@@ -2,20 +2,29 @@
 #define BRICKS_HPP
 
 #include <vector>
+#include <string>
+#include <iostream>
+#include <fstream>
 #include "brick.hpp"
 
 class Bricks
 {
 private:
     std::vector<Brick> m_all_bricks;
+    int m_screenWidth;
+    int m_screenHeight;
+    int m_padding;
+    int m_brickWidth;
+    int m_brickHeight;
 
 public:
-    Bricks(int rows, int cols, int screenWidth, int screenHeight) { initBricks(rows, cols, screenWidth, screenHeight / 4); } // Constructeur par défaut
+    Bricks(int screenWidth, int screenHeight, int padding) : m_screenWidth(screenWidth), m_screenHeight(screenHeight), m_padding(padding) {} // Default constructor
 
-    // init with rectangle brick
-    void initBricks(int rows, int cols, int width, int height);
-
-    // add Brick
+    // Init with ASCII file
+    void initWithFile(const std::string path);
+    // Calculate brick width and height
+    void initBrickWidthAndHeight(std::ifstream &file);
+    // Add brick
     void addBrick(const Brick &brick)
     {
         m_all_bricks.push_back(brick);
@@ -30,6 +39,12 @@ public:
                 brick.draw(renderer);
             }
         }
+    }
+
+    // Reset
+    void resetBricks()
+    {
+        m_all_bricks.clear();
     }
 
     // Remove brick

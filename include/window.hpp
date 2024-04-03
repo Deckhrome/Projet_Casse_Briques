@@ -20,7 +20,7 @@ public:
 
         CHK(TTF_Init() == 0);
 
-        m_font = TTF_OpenFont("/home/verdon/CPP/projet/Projet_Casse_Briques/font/font.ttf", 24);
+        m_font = TTF_OpenFont("data/font/font.ttf", 24);
         if (!m_font)
         {
             std::cerr << "Erreur lors du chargement de la police : " << TTF_GetError() << std::endl;
@@ -32,7 +32,7 @@ public:
         m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
         CHK(m_renderer != nullptr);
 
-        SDL_Surface *Surface = IMG_Load("/home/verdon/CPP/projet/Projet_Casse_Briques/img/orangeButton.png");
+        SDL_Surface *Surface = IMG_Load("data/img/orangeButton.png");
         CHK(Surface != nullptr);
 
         m_levelButtonTexture = SDL_CreateTextureFromSurface(m_renderer, Surface);

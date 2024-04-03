@@ -1,30 +1,52 @@
 #include "bricks.hpp"
 
-#define DURABILITY 100
+#define DURABILITY 69
 
-void Bricks::initBricks(int rows, int cols, int width, int height)
+void Bricks::initBrickWidthAndHeight(std::ifstream &file)
 {
-    int padding = 4;
-
-    int brickWidth = (width - (cols + 1) * padding) / cols;
-    int brickHeight = (height - (rows + 1) * padding) / rows;
-
-    // Position de départ pour le pavage de briques
-    int startX = (width - (cols * (brickWidth + padding)));
-    int startY = 50;
-
-    // Boucle pour créer les briques
-    for (int row = 0; row < rows; ++row)
+    int countRows = 0;
+    int countCols = 0;
+    std::string line;
+    while (std::getline(file, line))
     {
-        for (int col = 0; col < cols; ++col)
+        ++countRows;
+        if (countRows == 1)
         {
-            // Calcul de la position de chaque brique
-            int x = startX + col * (brickWidth + padding);
-            int y = startY + row * (brickHeight + padding);
-
-            // Création de la brique et ajout à la collection
-            Brick brick(x, y, brickWidth, brickHeight, DURABILITY);
-            addBrick(brick);
+            countCols = line.size();
         }
     }
+    // Calculate Brick
+    m_brickWidth = (m_screenWidth - (countCols + 1) * m_padding) / countCols;
+    m_brickHeight = (m_screenHeight / 3 - (countRows + 1) * m_padding) / countRows;
+    file.clear();
+    file.seekg(0, std::ios::beg);
+}
+
+void Bricks::initWithFile(const std::string path)
+{
+    std::ifstream file(path);
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open file: " << path << std::endl;
+        return;
+    }
+    initBrickWidthAndHeight(file);
+    std::string line;
+    int y = 50;
+    while (std::getline(file, line))
+    {
+        int x = m_padding;
+        for (char brickChar : line)
+        {
+            if (brickChar == 'B')
+            {
+                Brick brick(x, y, m_brickWidth, m_brickHeight, DURABILITY);
+                addBrick(brick);
+            }
+            x += m_brickWidth + m_padding; // Next column
+        }
+        y += m_brickHeight + m_padding; // Next line
+    }
+
+    file.close();
 }
