@@ -30,16 +30,7 @@ public:
         m_all_bricks.push_back(brick);
     }
 
-    void drawBricks(SDL_Renderer *renderer)
-    {
-        for (auto brick : m_all_bricks)
-        {
-            if (brick.getDurability() > 0)
-            {
-                brick.draw(renderer);
-            }
-        }
-    }
+    void drawBricks(SDL_Renderer *renderer);
 
     // Reset
     void resetBricks()

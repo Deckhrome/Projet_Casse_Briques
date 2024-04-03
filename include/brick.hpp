@@ -19,6 +19,7 @@ public:
         SDL_RenderFillRect(renderer, &rect);
     }
 
+    // Getters
     int getDurability() const
     {
         return m_durability;

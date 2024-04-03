@@ -85,7 +85,7 @@ void Paddle::update(float deltaTime)
     }
 }
 
-void Paddle::reset()
+void Paddle::resetPaddle()
 {
     m_x = (m_screenWidth - m_width) / 2;
     m_y = m_screenHeight - 100;

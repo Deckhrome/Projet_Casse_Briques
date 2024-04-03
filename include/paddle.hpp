@@ -21,7 +21,7 @@ public:
     int getX() const { return m_x; }
     int getY() const { return m_y; }
     // Reset position
-    void reset();
+    void resetPaddle();
 
 private:
     int m_x;

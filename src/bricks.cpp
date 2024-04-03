@@ -50,3 +50,14 @@ void Bricks::initWithFile(const std::string path)
 
     file.close();
 }
+
+void Bricks::drawBricks(SDL_Renderer *renderer)
+{
+    for (auto brick : m_all_bricks)
+    {
+        if (brick.getDurability() > 0)
+        {
+            brick.draw(renderer);
+        }
+    }
+}
