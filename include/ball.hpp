@@ -1,6 +1,7 @@
 #ifndef BALL_HPP
 #define BALL_HPP
 
+#include "vector2D.hpp"
 #include "paddle.hpp"
 #include "bricks.hpp"
 #include "gameStatus.hpp"
@@ -22,20 +23,17 @@ public:
     void handleCollisionsPaddle(Paddle paddle);
     void handleCollisionsBricks(Bricks &bricks, GameStatus &gameStatus);
 
-    // Getter
-    int getX() const { return m_x; }
-    int getY() const { return m_y; }
+    // Getters
+    int getRadius() const { return m_radius; }
+    Vector2D getPosition() const { return m_position; }
 
     // Reset position
     void resetBall();
 
 private:
     int m_radius;
-    int m_x;
-    int m_y;
-    int m_velocity;
-    int m_velocityX;
-    int m_velocityY;
+    Vector2D m_position;
+    Vector2D m_velocity;
     int m_screenWidth;
     int m_screenHeight;
     int m_updateCounter;

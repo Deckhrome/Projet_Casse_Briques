@@ -9,11 +9,8 @@
 #define STARTING_ANGLE (M_PI / 4)
 
 Ball::Ball(int radius, int initialX, int initialY, int screenWidth, int screenHeight) : m_radius(radius),
-                                                                                        m_x(initialX),
-                                                                                        m_y(initialY),
-                                                                                        m_velocity(VELOCITY),
-                                                                                        m_velocityX(0),
-                                                                                        m_velocityY(m_velocity),
+                                                                                        m_position(Vector2D(initialX,initialY)),
+                                                                                        m_velocity(Vector2D(0,VELOCITY)),
                                                                                         m_screenWidth(screenWidth),
                                                                                         m_screenHeight(screenHeight),
                                                                                         m_updateCounter(0),
@@ -21,14 +18,16 @@ Ball::Ball(int radius, int initialX, int initialY, int screenWidth, int screenHe
 
 void Ball::update(float deltaTime, Paddle paddle, Bricks &bricks, GameStatus &gameStatus)
 {
-    m_updateCounter++; // Add 1 update for ball
-    m_x += static_cast<int>(m_velocityX * deltaTime);
-    m_y += static_cast<int>(m_velocityY * deltaTime);
-    // Handle collision
+    m_updateCounter++; // Ajouter 1 mise à jour pour la balle
+    
+    // Gérer les collisions
+    m_position = m_position + m_velocity * deltaTime;
+
     handleCollisionsBorder(m_screenWidth, m_screenHeight, gameStatus);
     handleCollisionsPaddle(paddle);
     handleCollisionsBricks(bricks, gameStatus);
 }
+
 
 void Ball::handleInput(SDL_Event &event)
 {
@@ -50,7 +49,7 @@ void drawCircle(SDL_Renderer *renderer, int centerX, int centerY, int radius)
 void Ball::drawBall(SDL_Renderer *renderer) const
 {
     SDL_SetRenderDrawColor(renderer, Colours::Red.r, Colours::Red.g, Colours::Red.b, Colours::Red.a);
-    drawCircle(renderer, m_x, m_y, m_radius);
+    drawCircle(renderer, m_position.x, m_position.y, m_radius);
 }
 
 #include "ball.hpp"
@@ -76,16 +75,16 @@ void Ball::handleCollisionsBricks(Bricks &bricks, GameStatus &gameStatus)
         const Brick &brick = allBricks[i];
 
         // Verify collision on each sides
-        if (m_x + m_radius >= brick.getX() && m_x - m_radius <= brick.getX() + brick.getWidth() &&
-            m_y + m_radius >= brick.getY() && m_y - m_radius <= brick.getY() + brick.getHeight())
+        if (m_position.x + m_radius >= brick.getX() && m_position.x - m_radius <= brick.getX() + brick.getWidth() &&
+            m_position.y + m_radius >= brick.getY() && m_position.y - m_radius <= brick.getY() + brick.getHeight())
         {
             // Collision detected
             m_justCollide = true;
             // Calcul every overlap
-            double overlapLeft = m_x + m_radius - brick.getX();
-            double overlapRight = brick.getX() + brick.getWidth() - (m_x - m_radius);
-            double overlapTop = m_y + m_radius - brick.getY();
-            double overlapBottom = brick.getY() + brick.getHeight() - (m_y - m_radius);
+            double overlapLeft = m_position.x + m_radius - brick.getX();
+            double overlapRight = brick.getX() + brick.getWidth() - (m_position.x - m_radius);
+            double overlapTop = m_position.y + m_radius - brick.getY();
+            double overlapBottom = brick.getY() + brick.getHeight() - (m_position.y - m_radius);
 
             // Smallest Overlap to detect from which side the ball collide
             double smallestOverlap = std::min({overlapLeft, overlapRight, overlapTop, overlapBottom});
@@ -94,25 +93,25 @@ void Ball::handleCollisionsBricks(Bricks &bricks, GameStatus &gameStatus)
             {
                 // Left collision
                 printf("Left collision\n");
-                m_velocityX = -m_velocityX;
+                m_velocity.x = -m_velocity.x;
             }
             else if (smallestOverlap == overlapRight)
             {
                 // Right collision
                 printf("Right collision\n");
-                m_velocityX = -m_velocityX;
+                m_velocity.x = -m_velocity.x;
             }
             else if (smallestOverlap == overlapTop)
             {
                 // Top collision
                 printf("Top collision\n");
-                m_velocityY = -m_velocityY;
+                m_velocity.y = -m_velocity.y;
             }
             else if (smallestOverlap == overlapBottom)
             {
                 // Bot collision
                 printf("Bottom collision\n");
-                m_velocityY = -m_velocityY;
+                m_velocity.y = -m_velocity.y;
             }
 
             // Reduce durability
@@ -129,53 +128,53 @@ void Ball::handleCollisionsBricks(Bricks &bricks, GameStatus &gameStatus)
 
 void Ball::handleCollisionsPaddle(Paddle paddle)
 {
-    if (m_x + m_radius >= paddle.getX() && m_x - m_radius <= paddle.getX() + paddle.getWidth() &&
-        m_y + m_radius >= paddle.getY() && m_y - m_radius <= paddle.getY() + (paddle.getHeight() / 2))
+    if (m_position.x + m_radius >= paddle.getX() && m_position.x - m_radius <= paddle.getX() + paddle.getWidth() &&
+        m_position.y + m_radius >= paddle.getY() && m_position.y - m_radius <= paddle.getY() + (paddle.getHeight() / 2))
     {
         // Collision
         // Change direction depending on where it hits
-        double ratioCollision = static_cast<double>(m_x - (paddle.getX() + paddle.getWidth() / 2)) / static_cast<double>(paddle.getWidth() / 2);
+        double ratioCollision = static_cast<double>(m_position.x - (paddle.getX() + paddle.getWidth() / 2)) / static_cast<double>(paddle.getWidth() / 2);
         // printf("ratio : %f\n",ratioCollision);
         double angle = (abs(ratioCollision)) * (M_PI / 3); // Reduce de range of the angle possible
         // printf("angle : %f\n",(angle*180)/M_PI);
         if (ratioCollision < 0)
         {
-            m_velocityX = -m_velocity * sin(angle);
-            m_velocityY = -m_velocity * cos(angle);
+            m_velocity.x = -VELOCITY * sin(angle);
+            m_velocity.y = -VELOCITY * cos(angle);
         }
         else
         {
-            m_velocityX = m_velocity * sin(angle);
-            m_velocityY = -m_velocity * cos(angle);
+            m_velocity.x = VELOCITY * sin(angle);
+            m_velocity.y = -VELOCITY * cos(angle);
         }
         // Juste in case, the ball will hit just one time
-        m_y = paddle.getY() - m_radius - 1;
+        m_position.y = paddle.getY() - m_radius - 1;
     }
 }
 
 void Ball::handleCollisionsBorder(int windowWidth, int windowHeight, GameStatus &gameStatus)
 {
     // Border collision
-    // printf("posX : %d\nposY : %d\n",m_x - m_radius,m_y - m_radius);
-    if (m_x - m_radius < 0)
+    // printf("posX : %d\nposY : %d\n",m_position.x - m_radius,m_position.y - m_radius);
+    if (m_position.x - m_radius < 0)
     {
         // Left
-        m_x = m_radius;
-        m_velocityX = -m_velocityX;
+        m_position.x = m_radius;
+        m_velocity.x = -m_velocity.x;
     }
-    else if (m_x + m_radius > windowWidth)
+    else if (m_position.x + m_radius > windowWidth)
     {
         // Right
-        m_x = windowWidth - m_radius;
-        m_velocityX = -m_velocityX;
+        m_position.x = windowWidth - m_radius;
+        m_velocity.x = -m_velocity.x;
     }
-    if (m_y - m_radius < 0)
+    if (m_position.y - m_radius < 0)
     {
         // Top
-        m_y = m_radius;
-        m_velocityY = -m_velocityY;
+        m_position.y = m_radius;
+        m_velocity.y = -m_velocity.y;
     }
-    else if (m_y + m_radius > windowHeight)
+    else if (m_position.y + m_radius > windowHeight)
     {
         // Bottom
         // reset and decrease life
@@ -188,8 +187,8 @@ void Ball::handleCollisionsBorder(int windowWidth, int windowHeight, GameStatus 
 void Ball::resetBall()
 {
     // reset position and velocity
-    m_x = m_screenWidth / 2;
-    m_y = m_screenHeight / 2;
-    m_velocityX = 0;
-    m_velocityY = m_velocity;
+    m_position.x = m_screenWidth / 2;
+    m_position.y = m_screenHeight / 2;
+    m_velocity.x = 0;
+    m_velocity.y = VELOCITY;
 }

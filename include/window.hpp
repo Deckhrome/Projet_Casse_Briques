@@ -12,53 +12,13 @@
 class Window
 {
 public:
-    Window(int width, int height) : m_width(width), m_height(height)
-    {
-        CHK(SDL_Init(SDL_INIT_VIDEO) == 0);
+    Window(int width, int height);
 
-        CHK((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG));
-
-        CHK(TTF_Init() == 0);
-
-        m_font = TTF_OpenFont("data/font/font.ttf", 24);
-        if (!m_font)
-        {
-            std::cerr << "Erreur lors du chargement de la police : " << TTF_GetError() << std::endl;
-            exit(EXIT_FAILURE);
-        }
-        m_window = SDL_CreateWindow("Bricks Breaker", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
-        CHK(m_window != nullptr);
-
-        m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
-        CHK(m_renderer != nullptr);
-
-        SDL_Surface *Surface = IMG_Load("data/img/orangeButton.png");
-        CHK(Surface != nullptr);
-
-        m_levelButtonTexture = SDL_CreateTextureFromSurface(m_renderer, Surface);
-        SDL_FreeSurface(Surface); // Free surface after creating texture
-
-        CHK(m_levelButtonTexture != nullptr);
-    }
-
-    ~Window()
-    {
-        if (m_font)
-            TTF_CloseFont(m_font);
-        if (m_levelButtonTexture)
-            SDL_DestroyTexture(m_levelButtonTexture);
-        if (m_renderer)
-            SDL_DestroyRenderer(m_renderer);
-        if (m_window)
-            SDL_DestroyWindow(m_window);
-        TTF_Quit();
-        IMG_Quit();
-        SDL_Quit();
-    }
+    ~Window();
 
     // Getters
     // Get Render of window
-    SDL_Renderer *getRenderer() const { return m_renderer; }
+    SDL_Renderer *getRenderer() const { return m_renderer.get(); }
 
     // Get texture of window
     SDL_Texture *getTexture() const { return m_levelButtonTexture; }
@@ -75,30 +35,38 @@ public:
     // functions
     void display()
     {
-        SDL_RenderPresent(m_renderer);
+        SDL_RenderPresent(m_renderer.get());
     }
 
     void clear()
     {
-        SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-        SDL_RenderClear(m_renderer);
+        SDL_SetRenderDrawColor(m_renderer.get(), 0, 0, 0, 255);
+        SDL_RenderClear(m_renderer.get());
     }
 
 private:
     int m_width;
     int m_height;
-    SDL_Window *m_window;
-    SDL_Renderer *m_renderer;
+    std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> m_window;
+    std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> m_renderer;
     SDL_Texture *m_levelButtonTexture;
     TTF_Font *m_font;
     SDL_Texture *m_fontTexture;
 
-    // Verification SDL functions
-    void CHK(bool condition)
+    // Verification SDL, TTF functions
+    void CHK_SDL(bool condition)
     {
         if (!condition)
         {
             std::cerr << "Failure SDL: " << SDL_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+    void CHK_TTF(bool condition)
+    {
+        if (!condition)
+        {
+            std::cerr << "Failure TTF: " << TTF_GetError() << std::endl;
             exit(EXIT_FAILURE);
         }
     }
