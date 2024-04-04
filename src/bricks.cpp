@@ -1,6 +1,6 @@
 #include "bricks.hpp"
 
-#define DURABILITY 69
+#define DURABILITY 61
 
 void Bricks::initBrickWidthAndHeight(std::ifstream &file)
 {
@@ -32,7 +32,7 @@ void Bricks::initWithFile(const std::string path)
     }
     initBrickWidthAndHeight(file);
     std::string line;
-    int y = 50;
+    int y = 0; // Starting position
     while (std::getline(file, line))
     {
         int x = m_padding;
