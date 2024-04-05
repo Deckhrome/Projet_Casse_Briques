@@ -9,8 +9,8 @@
 #define STARTING_ANGLE (M_PI / 4)
 
 Ball::Ball(int radius, int initialX, int initialY, int screenWidth, int screenHeight) : m_radius(radius),
-                                                                                        m_position(Vector2D(initialX,initialY)),
-                                                                                        m_velocity(Vector2D(0,VELOCITY)),
+                                                                                        m_position(Vector2D(initialX, initialY)),
+                                                                                        m_velocity(Vector2D(0, VELOCITY)),
                                                                                         m_screenWidth(screenWidth),
                                                                                         m_screenHeight(screenHeight),
                                                                                         m_updateCounter(0),
@@ -19,7 +19,7 @@ Ball::Ball(int radius, int initialX, int initialY, int screenWidth, int screenHe
 void Ball::update(float deltaTime, Paddle paddle, Bricks &bricks, GameStatus &gameStatus)
 {
     m_updateCounter++; // Ajouter 1 mise à jour pour la balle
-    
+
     // Gérer les collisions
     m_position = m_position + m_velocity * deltaTime;
 
@@ -27,7 +27,6 @@ void Ball::update(float deltaTime, Paddle paddle, Bricks &bricks, GameStatus &ga
     handleCollisionsPaddle(paddle);
     handleCollisionsBricks(bricks, gameStatus);
 }
-
 
 void Ball::handleInput(SDL_Event &event)
 {
