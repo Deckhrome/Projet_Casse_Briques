@@ -24,8 +24,14 @@ public:
         resetScore();
         resetLife();
     }
+    // Increase score ratio
+    void increaseScoreRatio() { m_scoreRatio += 1; }
+
     // Increase score
     void increaseScore() { m_score += 10 * m_scoreRatio; }
+
+    // Increase life
+    void increaseLife() { m_life += 1; }
 
     // Decrease life
     void decreaseLife() { m_life -= 1; }

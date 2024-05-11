@@ -10,6 +10,7 @@
 #include "ball.hpp"
 #include "menu.hpp"
 #include "gameStatus.hpp"
+#include "bonuses.hpp"
 
 enum class GameState
 {
@@ -32,14 +33,11 @@ public:
                                                                                                   m_paddle((screenWidth - paddleWidth) / 2, screenHeight - 100, paddleWidth, paddleHeight, screenHeight, screenWidth),
                                                                                                   m_ball(ball_radius, screenWidth / 2, screenHeight / 2, screenWidth, screenHeight),
                                                                                                   m_bricks(screenWidth, screenHeight, 0),
+                                                                                                  m_bonuses(screenWidth, screenHeight),
                                                                                                   m_gameState(GameState::MENU),
                                                                                                   m_level(Level::LEVEL_1),
                                                                                                   m_menu(m_window.getRenderer(), screenWidth, screenHeight, m_window.getTexture(), m_window.getFont()),
-                                                                                                  m_gameStatus()
-
-    {
-        m_menu.initMenu();
-    }
+                                                                                                  m_gameStatus() {}
     void run();
     void stillPlaying();
     void drawLevel(SDL_Renderer *renderer);
@@ -56,6 +54,7 @@ private:
     Paddle m_paddle;
     Ball m_ball;
     Bricks m_bricks;
+    Bonuses m_bonuses;
     GameState m_gameState;
     Level m_level;
     Menu m_menu;

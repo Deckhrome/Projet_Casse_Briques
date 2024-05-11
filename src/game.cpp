@@ -71,15 +71,18 @@ void Game::drawLevel(SDL_Renderer *renderer)
     m_paddle.drawPaddle(renderer);
     m_ball.drawBall(renderer);
     m_bricks.drawBricks(renderer);
+    m_bonuses.drawBonuses(renderer);
 }
 void Game::update(float deltaTime)
 {
+    m_bonuses.update(deltaTime);
     m_paddle.update(deltaTime);
-    m_ball.update(deltaTime, m_paddle, m_bricks, m_gameStatus);
+    m_ball.update(deltaTime, m_paddle, m_bricks, m_bonuses, m_gameStatus);
 }
 
 void Game::reset()
 {
+    m_bonuses.resetBonuses();
     m_ball.resetBall();
     m_paddle.resetPaddle();
     m_bricks.resetBricks();
