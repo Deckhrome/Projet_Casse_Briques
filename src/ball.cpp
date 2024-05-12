@@ -12,7 +12,7 @@
 
 Ball::Ball(int radius, int initialX, int initialY, int screenWidth, int screenHeight) : m_radius(radius),
                                                                                         m_position(Vector2D(initialX,initialY)),
-                                                                                        m_velocity(Vector2D(5,VELOCITY)),
+                                                                                        m_velocity(Vector2D(0,VELOCITY)),
                                                                                         m_screenWidth(screenWidth),
                                                                                         m_screenHeight(screenHeight),
                                                                                         m_updateCounter(0),
@@ -128,7 +128,7 @@ void Ball::handleCollisionsBricks(Bricks &bricks, Bonuses &bonuses, GameStatus &
                 // Appear a bonus randomly
                 if(rand()%1 == 0)
                 {
-                    Bonus bonus(brick.getX() - brick.getWidth(), brick.getY() - brick.getHeight(), 20, 20, rand()%8);
+                    Bonus bonus(brick.getX() - brick.getWidth() / 2, brick.getY() + brick.getHeight() / 2, 20, 20, rand()%8);
                     std::cout << "bonus : " << bonus.getType() << std::endl;
                     bonuses.pushBonus(bonus);
                 }
@@ -197,32 +197,32 @@ void Ball::handleCollisionsBonuses(Bonuses &bonuses, Paddle &paddle, GameStatus 
             switch (bonus.getType())
             {
             case 0: // Increase paddle size
-                paddle.setWidth(paddle.getWidth() + 100);
+                paddle.setWidth(paddle.getWidth() + 200);
                 std::cout << "paddle width : " << paddle.getWidth() << std::endl;
                 break;
-            case 1: // Decrease paddle size
-                paddle.setWidth(std::max(20, paddle.getWidth() - 50)); // Ensure paddle width doesn't go below 20
-                std::cout << "paddle width : " << paddle.getWidth() << std::endl;
+            case 1: // Duplicate ball
+                // Add a ball to the balls vector
                 break;
-            case 2: // Increase ball speed
+            case 2: // Decrease ball size
+                m_radius = std::max(5, m_radius - 5); // Ensure ball radius doesn't go below 5
+                break;
+            case 3: // Increase life
+                gameStatus.increaseLife();
+                std::cout << "life : " << gameStatus.getLife() << std::endl;
+                break;
+            case 4: // Increase score ratio
+                gameStatus.increaseScoreRatio();
+                break;
+            case 5: // Increase ball speed
                 m_velocityRatio = std::min(2.0, m_velocityRatio + 0.5); // Ensure ball speed doesn't go above 2.0
                 std::cout << "velocity ratio after increase : " << m_velocityRatio << std::endl;
                 break;
-            case 3: // Decrease ball speed
-                m_velocityRatio = std::max(0.5, m_velocityRatio - 0.5); // Ensure ball speed doesn't go below 0.5
-                std::cout << "velocity ratio after decrease : " << m_velocityRatio << std::endl;
-                break;
-            case 4: // Increase ball size
+            case 6: // Increase ball size
                 m_radius = std::min(30, m_radius + 10); // Ensure ball radius doesn't go above 50
                 break;
-            case 5: // Decrease ball size
-                m_radius = std::max(5, m_radius - 5); // Ensure ball radius doesn't go below 5
-                break;
-            case 6: // Increase life
-                gameStatus.increaseLife();
-                break;
-            case 7: // Increase score ratio
-                gameStatus.increaseScoreRatio();
+            case 7: // Decrease paddle size
+                paddle.setWidth(std::max(20, paddle.getWidth() - 50)); // Ensure paddle width doesn't go below 20
+                std::cout << "paddle width : " << paddle.getWidth() << std::endl;
                 break;
             default:
                 break;

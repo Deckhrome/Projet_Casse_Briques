@@ -19,11 +19,17 @@ Window::Window(int width, int height) : m_width(width), m_height(height),
     m_renderer.reset(SDL_CreateRenderer(m_window.get(), -1, SDL_RENDERER_ACCELERATED));
     CHK_SDL(m_renderer != nullptr);
 
-    SDL_Surface *Surface = IMG_Load("data/img/orangeButton.png");
-    CHK_SDL(Surface != nullptr);
+    SDL_Surface *buttonSurface = IMG_Load("data/img/orangeButton.png");
+    CHK_SDL(buttonSurface != nullptr);
 
-    m_levelButtonTexture = SDL_CreateTextureFromSurface(m_renderer.get(), Surface);
-    CHK_SDL(Surface); // Free surface after creating texture
+    m_levelButtonTexture = SDL_CreateTextureFromSurface(m_renderer.get(), buttonSurface);
+    SDL_FreeSurface(buttonSurface);
+
+    SDL_Surface *backgroundSurface = IMG_Load("data/img/background3.png");
+    CHK_SDL(backgroundSurface != nullptr);
+
+    m_backgroundTexture = SDL_CreateTextureFromSurface(m_renderer.get(), backgroundSurface);
+    SDL_FreeSurface(backgroundSurface);
 
     CHK_SDL(m_levelButtonTexture != nullptr);
 }
@@ -34,6 +40,8 @@ Window::~Window()
         TTF_CloseFont(m_font);
     if (m_levelButtonTexture)
         SDL_DestroyTexture(m_levelButtonTexture);
+    if (m_backgroundTexture)
+        SDL_DestroyTexture(m_backgroundTexture);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();

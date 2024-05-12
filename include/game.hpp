@@ -30,13 +30,13 @@ class Game
 {
 public:
     Game(int screenWidth, int screenHeight, int paddleWidth, int paddleHeight, int ball_radius) : m_window(screenWidth, screenHeight),
-                                                                                                  m_paddle((screenWidth - paddleWidth) / 2, screenHeight - 100, paddleWidth, paddleHeight, screenHeight, screenWidth),
+                                                                                                  m_paddle((screenWidth - paddleWidth) / 2, screenHeight - 100, paddleWidth, paddleHeight, screenWidth, screenHeight),
                                                                                                   m_ball(ball_radius, screenWidth / 2, screenHeight / 2, screenWidth, screenHeight),
-                                                                                                  m_bricks(screenWidth, screenHeight, 0),
+                                                                                                  m_bricks(screenWidth, screenHeight,1),
                                                                                                   m_bonuses(screenWidth, screenHeight),
                                                                                                   m_gameState(GameState::MENU),
                                                                                                   m_level(Level::LEVEL_1),
-                                                                                                  m_menu(m_window.getRenderer(), screenWidth, screenHeight, m_window.getTexture(), m_window.getFont()),
+                                                                                                  m_menu(m_window.getRenderer(), screenWidth, screenHeight, m_window.getButtonTexture(), m_window.getFont()),
                                                                                                   m_gameStatus() {}
     void run();
     void stillPlaying();

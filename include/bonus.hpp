@@ -4,17 +4,18 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "colour.hpp"
-
 enum BonusType
 {
+    // Good bonuses
     PaddleSizeIncrease,
-    PaddleSizeDecrease,
-    BallSpeedIncrease,
     BallDuplication,
     BallSizeIncrease,
-    BallSizeDecrease,
     BallExtraLife,
-    BallExtraScore
+    BallExtraScore,
+    // Bad bonuses
+    BallSpeedIncrease,
+    BallSizeDecrease,
+    PaddleSizeDecrease
 };
 
 class Bonus 
@@ -26,6 +27,38 @@ public:
     {
         SDL_Rect rect = {m_x, m_y, m_width, m_height};
         SDL_Color c = Colours::Purple;
+        if (m_type == BonusType::PaddleSizeIncrease)
+        {
+            c = Colours::Green;
+        }
+        else if (m_type == BonusType::BallDuplication)
+        {
+            c = Colours::Yellow;
+        }
+        else if (m_type == BonusType::BallSizeIncrease)
+        {
+            c = Colours::Blue;
+        }
+        else if (m_type == BonusType::BallExtraLife)
+        {
+            c = Colours::Red;
+        }
+        else if (m_type == BonusType::BallExtraScore)
+        {
+            c = Colours::Orange;
+        }
+        else if (m_type == BonusType::BallSpeedIncrease)
+        {
+            c = Colours::Black;
+        }
+        else if (m_type == BonusType::BallSizeDecrease)
+        {
+            c = Colours::White;
+        }
+        else if (m_type == BonusType::PaddleSizeDecrease)
+        {
+            c = Colours::Pink;
+        }
         SDL_SetRenderDrawColor(renderer,c.r, c.g, c.b, c.a); // Couleur bleue
         SDL_RenderFillRect(renderer, &rect);
     }

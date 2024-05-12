@@ -20,8 +20,11 @@ public:
     // Get Render of window
     SDL_Renderer *getRenderer() const { return m_renderer.get(); }
 
-    // Get texture of window
-    SDL_Texture *getTexture() const { return m_levelButtonTexture; }
+    // Get texture of buttons
+    SDL_Texture *getButtonTexture() const { return m_levelButtonTexture; }
+
+    // Get background texture of window
+    SDL_Texture *getBackgroundTexture() const { return m_backgroundTexture; }
 
     // Get font of window
     TTF_Font *getFont() const { return m_font; }
@@ -49,6 +52,7 @@ private:
     int m_height;
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> m_window;
     std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> m_renderer;
+    SDL_Texture *m_backgroundTexture;
     SDL_Texture *m_levelButtonTexture;
     TTF_Font *m_font;
     SDL_Texture *m_fontTexture;

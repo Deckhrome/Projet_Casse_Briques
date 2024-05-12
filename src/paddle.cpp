@@ -1,5 +1,6 @@
 #include "../include/paddle.hpp"
 #include "../include/colour.hpp"
+#include <iostream>
 
 void Paddle::handleInput(SDL_Event &event, int screenWidth)
 {
@@ -89,4 +90,5 @@ void Paddle::resetPaddle()
 {
     m_x = (m_screenWidth - m_width) / 2;
     m_y = m_screenHeight - 100;
+    printf("Paddle reset %d\n", m_screenHeight);
 }
