@@ -1,6 +1,8 @@
 #include <cmath>
 #include <math.h>
 #include <algorithm>
+#include <iostream>
+#include <stdlib.h>
 #include "../include/ball.hpp"
 #include "../include/colour.hpp"
 
@@ -14,18 +16,20 @@ Ball::Ball(int radius, int initialX, int initialY, int screenWidth, int screenHe
                                                                                         m_screenWidth(screenWidth),
                                                                                         m_screenHeight(screenHeight),
                                                                                         m_updateCounter(0),
-                                                                                        m_justCollide(false) {}
+                                                                                        m_justCollide(false),
+                                                                                        m_velocityRatio(1) {}
 
-void Ball::update(float deltaTime, Paddle paddle, Bricks &bricks, GameStatus &gameStatus)
+void Ball::update(float deltaTime, Paddle paddle, Bricks &bricks, Bonuses &bonuses, GameStatus &gameStatus)
 {
     m_updateCounter++; // Ajouter 1 mise à jour pour la balle
 
     // Gérer les collisions
-    m_position = m_position + m_velocity * deltaTime;
+    m_position = m_position + m_velocity * m_velocityRatio * deltaTime;
 
     handleCollisionsBorder(m_screenWidth, m_screenHeight, gameStatus);
     handleCollisionsPaddle(paddle);
-    handleCollisionsBricks(bricks, gameStatus);
+    handleCollisionsBricks(bricks, bonuses, gameStatus);
+    handleCollisionsBonuses(bonuses, paddle, gameStatus);
 }
 
 void Ball::handleInput(SDL_Event &event)
@@ -54,7 +58,7 @@ void Ball::drawBall(SDL_Renderer *renderer) const
 #include "ball.hpp"
 #include "bricks.hpp"
 
-void Ball::handleCollisionsBricks(Bricks &bricks, GameStatus &gameStatus)
+void Ball::handleCollisionsBricks(Bricks &bricks, Bonuses &bonuses, GameStatus &gameStatus)
 {
     if (m_justCollide)
     {
@@ -91,35 +95,44 @@ void Ball::handleCollisionsBricks(Bricks &bricks, GameStatus &gameStatus)
             if (smallestOverlap == overlapLeft)
             {
                 // Left collision
-                printf("Left collision\n");
+                // printf("Left collision\n");
                 m_velocity.x = -m_velocity.x;
             }
             else if (smallestOverlap == overlapRight)
             {
                 // Right collision
-                printf("Right collision\n");
+                // printf("Right collision\n");
                 m_velocity.x = -m_velocity.x;
             }
             else if (smallestOverlap == overlapTop)
             {
                 // Top collision
-                printf("Top collision\n");
+                // printf("Top collision\n");
                 m_velocity.y = -m_velocity.y;
             }
             else if (smallestOverlap == overlapBottom)
             {
                 // Bot collision
-                printf("Bottom collision\n");
+                // printf("Bottom collision\n");
                 m_velocity.y = -m_velocity.y;
             }
 
             // Reduce durability
             bricks.setBrickDurability(i, brick.getDurability() - 20);
             gameStatus.increaseScore();
-            std::cout << "score : " << gameStatus.getScore() << std::endl;
+            //std::cout << "score : " << gameStatus.getScore() << std::endl;
             // Don't loop on the last bricks
-            if (brick.getDurability() <= 0)
+            if (brick.getDurability() <= 0){
                 bricks.removeBrick(i);
+                // Appear a bonus randomly
+                if(rand()%1 == 0)
+                {
+                    Bonus bonus(brick.getX() - brick.getWidth() / 2, brick.getY() + brick.getHeight() / 2, 20, 20, rand()%8);
+                    std::cout << "bonus : " << bonus.getType() << std::endl;
+                    bonuses.pushBonus(bonus);
+                }
+            }
+
             break;
         }
     }
@@ -130,6 +143,7 @@ void Ball::handleCollisionsPaddle(Paddle paddle)
     if (m_position.x + m_radius >= paddle.getX() && m_position.x - m_radius <= paddle.getX() + paddle.getWidth() &&
         m_position.y + m_radius >= paddle.getY() && m_position.y - m_radius <= paddle.getY() + (paddle.getHeight() / 2))
     {
+        //std::cout << "Paddle collision :"<< m_velocity.x + m_velocity.y << std::endl;
         // Collision
         // Change direction depending on where it hits
         double ratioCollision = static_cast<double>(m_position.x - (paddle.getX() + paddle.getWidth() / 2)) / static_cast<double>(paddle.getWidth() / 2);
@@ -138,8 +152,8 @@ void Ball::handleCollisionsPaddle(Paddle paddle)
         // printf("angle : %f\n",(angle*180)/M_PI);
         if (ratioCollision < 0)
         {
-            m_velocity.x = -VELOCITY * sin(angle);
-            m_velocity.y = -VELOCITY * cos(angle);
+            m_velocity.x = - m_velocityRatio * VELOCITY * sin(angle);
+            m_velocity.y = - m_velocityRatio * VELOCITY * cos(angle);
         }
         else
         {
@@ -150,6 +164,76 @@ void Ball::handleCollisionsPaddle(Paddle paddle)
         m_position.y = paddle.getY() - m_radius - 1;
     }
 }
+
+void Ball::handleCollisionsBonuses(Bonuses &bonuses, Paddle &paddle, GameStatus &gameStatus)
+{
+    // Get all bonuses
+    const std::vector<Bonus> &allBonuses = bonuses.getBonuses();
+    // Iterate through all bonuses
+    for (size_t i = 0; i < allBonuses.size(); ++i)
+    {
+        const Bonus &bonus = allBonuses[i];
+
+        // Get bonus position and dimensions
+        int bonus_x = bonus.getX();
+        int bonus_y = bonus.getY();
+        int bonus_width = bonus.getWidth();
+        int bonus_height = bonus.getHeight();
+
+        // Get paddle position and dimensions
+        int paddle_x = paddle.getX();
+        int paddle_y = paddle.getY();
+        int paddle_width = paddle.getWidth();
+        int paddle_height = paddle.getHeight();
+
+        // Check collision between paddle and bonus
+        if (paddle_x + paddle_width >= bonus_x &&
+            paddle_x <= bonus_x + bonus_width &&
+            paddle_y + paddle_height >= bonus_y &&
+            paddle_y <= bonus_y + bonus_height)
+        {
+            // Apply bonus effect based on bonus type
+            switch (bonus.getType())
+            {
+            case 0: // Increase paddle size
+                paddle.setWidth(paddle.getWidth() + 200);
+                std::cout << "paddle width : " << paddle.getWidth() << std::endl;
+                break;
+            case 1: // Duplicate ball
+                // Add a ball to the balls vector
+                break;
+            case 2: // Decrease ball size
+                m_radius = std::max(5, m_radius - 5); // Ensure ball radius doesn't go below 5
+                break;
+            case 3: // Increase life
+                gameStatus.increaseLife();
+                std::cout << "life : " << gameStatus.getLife() << std::endl;
+                break;
+            case 4: // Increase score ratio
+                gameStatus.increaseScoreRatio();
+                break;
+            case 5: // Increase ball speed
+                m_velocityRatio = std::min(2.0, m_velocityRatio + 0.5); // Ensure ball speed doesn't go above 2.0
+                std::cout << "velocity ratio after increase : " << m_velocityRatio << std::endl;
+                break;
+            case 6: // Increase ball size
+                m_radius = std::min(30, m_radius + 10); // Ensure ball radius doesn't go above 50
+                break;
+            case 7: // Decrease paddle size
+                paddle.setWidth(std::max(20, paddle.getWidth() - 50)); // Ensure paddle width doesn't go below 20
+                std::cout << "paddle width : " << paddle.getWidth() << std::endl;
+                break;
+            default:
+                break;
+            }
+
+            // Remove the collected bonus
+            bonuses.removeBonus(i);
+            break; // Exit loop after processing collision with one bonus
+        }
+    }
+}
+
 
 void Ball::handleCollisionsBorder(int windowWidth, int windowHeight, GameStatus &gameStatus)
 {
@@ -190,4 +274,6 @@ void Ball::resetBall()
     m_position.y = m_screenHeight / 2;
     m_velocity.x = 0;
     m_velocity.y = VELOCITY;
+    m_velocityRatio = 1;
+    m_radius = 10;
 }

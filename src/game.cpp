@@ -1,10 +1,12 @@
 #include "../include/game.hpp"
+#include <time.h>
 
 void Game::run()
 {
     bool running = true;
     SDL_Event event;
     Uint32 lastFrameTime = SDL_GetTicks();
+    srand (time(NULL));
 
     while (running)
     {
@@ -62,6 +64,8 @@ void Game::renderLevel(Level currentLevel, float deltaTime)
 void Game::render()
 {
     m_window.clear();
+    SDL_Rect rect = {0, 0, m_window.getWidth(), m_window.getHeight()};
+    SDL_RenderCopy(m_window.getRenderer(), m_window.getBackgroundTexture(), nullptr, &rect);
     this->drawLevel(m_window.getRenderer());
     m_window.display();
 }
@@ -71,15 +75,18 @@ void Game::drawLevel(SDL_Renderer *renderer)
     m_paddle.drawPaddle(renderer);
     m_ball.drawBall(renderer);
     m_bricks.drawBricks(renderer);
+    m_bonuses.drawBonuses(renderer);
 }
 void Game::update(float deltaTime)
 {
+    m_bonuses.update(deltaTime);
     m_paddle.update(deltaTime);
-    m_ball.update(deltaTime, m_paddle, m_bricks, m_gameStatus);
+    m_ball.update(deltaTime, m_paddle, m_bricks, m_bonuses, m_gameStatus);
 }
 
 void Game::reset()
 {
+    m_bonuses.resetBonuses();
     m_ball.resetBall();
     m_paddle.resetPaddle();
     m_bricks.resetBricks();
@@ -136,11 +143,12 @@ void Game::handleMenuInput(SDL_Event event)
 
 void Game::stillPlaying()
 {
-    if (m_bricks.getTotalBricks() == 0 || m_gameStatus.getLife() == 0)
+    if ((m_bricks.getTotalBricks() == 0 || m_gameStatus.getLife() == 0) && GameState::LEVEL == m_gameState)
     {
         m_gameState = GameState::MENU;
         // reset
         this->reset();
+        printf("Game Over\n");
         return;
     }
 }

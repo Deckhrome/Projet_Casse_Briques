@@ -16,6 +16,8 @@ namespace Colours
     const SDL_Color Yellow = {255, 255, 0, 255};
     const SDL_Color Cyan = {0, 255, 255, 255};
     const SDL_Color LightBlue = {135, 206, 250, 255};
+    const SDL_Color Pink = {255, 105, 180, 255};
+    const SDL_Color Purple = {128, 0, 128, 255};
 }
 
 #endif
