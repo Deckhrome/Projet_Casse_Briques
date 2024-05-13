@@ -120,14 +120,15 @@ void Ball::handleCollisionsBricks(Bricks &bricks, Bonuses &bonuses, GameStatus &
             // Reduce durability
             bricks.setBrickDurability(i, brick.getDurability() - 20);
             gameStatus.increaseScore();
-            //std::cout << "score : " << gameStatus.getScore() << std::endl;
-            // Don't loop on the last bricks
-            if (brick.getDurability() <= 0){
+            // std::cout << "score : " << gameStatus.getScore() << std::endl;
+            //  Don't loop on the last bricks
+            if (brick.getDurability() <= 0)
+            {
                 bricks.removeBrick(i);
                 // Appear a bonus randomly
-                if(rand()%1 == 0)
+                if (rand() % 1 == 0)
                 {
-                    Bonus bonus(brick.getX() - brick.getWidth() / 2, brick.getY() + brick.getHeight() / 2, 20, 20, rand()%8);
+                    Bonus bonus(brick.getX() - brick.getWidth() / 2, brick.getY() + brick.getHeight() / 2, 20, 20, rand() % 8);
                     std::cout << "bonus : " << bonus.getType() << std::endl;
                     bonuses.pushBonus(bonus);
                 }
@@ -143,17 +144,17 @@ void Ball::handleCollisionsPaddle(Paddle paddle)
     if (m_position.x + m_radius >= paddle.getX() && m_position.x - m_radius <= paddle.getX() + paddle.getWidth() &&
         m_position.y + m_radius >= paddle.getY() && m_position.y - m_radius <= paddle.getY() + (paddle.getHeight() / 2))
     {
-        //std::cout << "Paddle collision :"<< m_velocity.x + m_velocity.y << std::endl;
-        // Collision
-        // Change direction depending on where it hits
+        // std::cout << "Paddle collision :"<< m_velocity.x + m_velocity.y << std::endl;
+        //  Collision
+        //  Change direction depending on where it hits
         double ratioCollision = static_cast<double>(m_position.x - (paddle.getX() + paddle.getWidth() / 2)) / static_cast<double>(paddle.getWidth() / 2);
         // printf("ratio : %f\n",ratioCollision);
         double angle = (abs(ratioCollision)) * (M_PI / 3); // Reduce de range of the angle possible
         // printf("angle : %f\n",(angle*180)/M_PI);
         if (ratioCollision < 0)
         {
-            m_velocity.x = - m_velocityRatio * VELOCITY * sin(angle);
-            m_velocity.y = - m_velocityRatio * VELOCITY * cos(angle);
+            m_velocity.x = -m_velocityRatio * VELOCITY * sin(angle);
+            m_velocity.y = -m_velocityRatio * VELOCITY * cos(angle);
         }
         else
         {
@@ -202,7 +203,7 @@ void Ball::handleCollisionsBonuses(Bonuses &bonuses, Paddle &paddle, GameStatus 
             case 1: // Duplicate ball
                 // Add a ball to the balls vector
                 break;
-            case 2: // Decrease ball size
+            case 2:                                   // Decrease ball size
                 m_radius = std::max(5, m_radius - 5); // Ensure ball radius doesn't go below 5
                 break;
             case 3: // Increase life
@@ -212,14 +213,14 @@ void Ball::handleCollisionsBonuses(Bonuses &bonuses, Paddle &paddle, GameStatus 
             case 4: // Increase score ratio
                 gameStatus.increaseScoreRatio();
                 break;
-            case 5: // Increase ball speed
+            case 5:                                                     // Increase ball speed
                 m_velocityRatio = std::min(2.0, m_velocityRatio + 0.5); // Ensure ball speed doesn't go above 2.0
                 std::cout << "velocity ratio after increase : " << m_velocityRatio << std::endl;
                 break;
-            case 6: // Increase ball size
+            case 6:                                     // Increase ball size
                 m_radius = std::min(30, m_radius + 10); // Ensure ball radius doesn't go above 50
                 break;
-            case 7: // Decrease paddle size
+            case 7:                                                    // Decrease paddle size
                 paddle.setWidth(std::max(20, paddle.getWidth() - 50)); // Ensure paddle width doesn't go below 20
                 std::cout << "paddle width : " << paddle.getWidth() << std::endl;
                 break;
@@ -233,7 +234,6 @@ void Ball::handleCollisionsBonuses(Bonuses &bonuses, Paddle &paddle, GameStatus 
         }
     }
 }
-
 
 void Ball::handleCollisionsBorder(int windowWidth, int windowHeight, GameStatus &gameStatus)
 {
