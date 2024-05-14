@@ -18,7 +18,7 @@ class Menu
 {
 public:
     Menu(SDL_Renderer *renderer, int screenWidth, int screenHeight, SDL_Texture *levelButtonTexture, TTF_Font *font)
-        : m_renderer(renderer), m_screenWidth(screenWidth), m_screenHeight(screenHeight), m_levelButtonTexture(levelButtonTexture), m_font(font) {initMenu();}
+        : m_renderer(renderer), m_screenWidth(screenWidth), m_screenHeight(screenHeight), m_levelButtonTexture(levelButtonTexture), m_font(font) { initMenu(); }
 
     struct LevelButton
     {

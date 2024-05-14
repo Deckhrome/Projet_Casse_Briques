@@ -18,7 +18,7 @@ enum BonusType
     PaddleSizeDecrease
 };
 
-class Bonus 
+class Bonus
 {
 public:
     Bonus(int x, int y, int width, int height, int type) : m_x(x), m_y(y), m_width(width), m_height(height), m_type(type) {}
@@ -59,7 +59,7 @@ public:
         {
             c = Colours::Pink;
         }
-        SDL_SetRenderDrawColor(renderer,c.r, c.g, c.b, c.a); // Couleur bleue
+        SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a); // Couleur bleue
         SDL_RenderFillRect(renderer, &rect);
     }
 
@@ -69,6 +69,9 @@ public:
         return m_y;
     }
 
+    bool isActive() const { return m_active; }
+
+    void setActive(bool active) { m_active = active; }
 
     // Getters
     int getX() const { return m_x; }
@@ -83,6 +86,7 @@ protected:
     int m_width;
     int m_height;
     int m_type;
+    bool m_active = true;
 };
 
 #endif // BONUS_HPP

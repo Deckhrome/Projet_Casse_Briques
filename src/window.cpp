@@ -1,8 +1,8 @@
 #include "../include/window.hpp"
 
 Window::Window(int width, int height) : m_width(width), m_height(height),
-    m_window(nullptr, &SDL_DestroyWindow),
-    m_renderer(nullptr, &SDL_DestroyRenderer)
+                                        m_window(nullptr, &SDL_DestroyWindow),
+                                        m_renderer(nullptr, &SDL_DestroyRenderer)
 {
     CHK_SDL(SDL_Init(SDL_INIT_VIDEO) == 0);
 
@@ -25,7 +25,7 @@ Window::Window(int width, int height) : m_width(width), m_height(height),
     m_levelButtonTexture = SDL_CreateTextureFromSurface(m_renderer.get(), buttonSurface);
     SDL_FreeSurface(buttonSurface);
 
-    SDL_Surface *backgroundSurface = IMG_Load("data/img/background3.png");
+    SDL_Surface *backgroundSurface = IMG_Load("data/img/background.jpg");
     CHK_SDL(backgroundSurface != nullptr);
 
     m_backgroundTexture = SDL_CreateTextureFromSurface(m_renderer.get(), backgroundSurface);

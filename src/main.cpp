@@ -1,8 +1,8 @@
 #include <iostream>
 #include "../include/game.hpp"
 
-#define SCREEN_WIDTH 960
-#define SCREEN_HEIGHT 686
+#define SCREEN_WIDTH 948
+#define SCREEN_HEIGHT 525
 #define PADDLE_WIDTH 150
 #define PADDLE_HEIGHT 20
 #define BALL_RADIUS 10

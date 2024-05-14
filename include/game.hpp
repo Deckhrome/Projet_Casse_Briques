@@ -11,6 +11,7 @@
 #include "menu.hpp"
 #include "gameStatus.hpp"
 #include "bonuses.hpp"
+#include "balls.hpp"
 
 enum class GameState
 {
@@ -31,13 +32,13 @@ class Game
 public:
     Game(int screenWidth, int screenHeight, int paddleWidth, int paddleHeight, int ball_radius) : m_window(screenWidth, screenHeight),
                                                                                                   m_paddle((screenWidth - paddleWidth) / 2, screenHeight - 100, paddleWidth, paddleHeight, screenWidth, screenHeight),
-                                                                                                  m_ball(ball_radius, screenWidth / 2, screenHeight / 2, screenWidth, screenHeight),
-                                                                                                  m_bricks(screenWidth, screenHeight,1),
+                                                                                                  m_balls(ball_radius, screenWidth / 2, screenHeight / 2, screenWidth, screenHeight),
+                                                                                                  m_bricks(screenWidth, screenHeight, 1),
                                                                                                   m_bonuses(screenWidth, screenHeight),
                                                                                                   m_gameState(GameState::MENU),
                                                                                                   m_level(Level::LEVEL_1),
                                                                                                   m_menu(m_window.getRenderer(), screenWidth, screenHeight, m_window.getButtonTexture(), m_window.getFont()),
-                                                                                                  m_gameStatus() {}
+                                                                                                  m_gameStatus(m_window.getFont(), screenWidth, screenHeight) {}
     void run();
     void stillPlaying();
     void drawLevel(SDL_Renderer *renderer);
@@ -52,7 +53,7 @@ public:
 private:
     Window m_window;
     Paddle m_paddle;
-    Ball m_ball;
+    Balls m_balls;
     Bricks m_bricks;
     Bonuses m_bonuses;
     GameState m_gameState;

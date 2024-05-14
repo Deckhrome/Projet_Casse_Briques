@@ -68,7 +68,7 @@ void Paddle::handleInput(SDL_Event &event, int screenWidth)
 void Paddle::drawPaddle(SDL_Renderer *renderer) const
 {
     SDL_Rect rect = {m_x, m_y, m_width, m_height};
-    SDL_Color c = Colours::Black;
+    SDL_Color c = Colours::White;
     SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
     SDL_RenderFillRect(renderer, &rect);
 }

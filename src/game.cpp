@@ -1,16 +1,17 @@
 #include "../include/game.hpp"
 #include <time.h>
+#include <iostream>
+#include <random>
 
 void Game::run()
 {
     bool running = true;
     SDL_Event event;
     Uint32 lastFrameTime = SDL_GetTicks();
-    srand (time(NULL));
+    srand(time(NULL));
 
     while (running)
     {
-        stillPlaying();
         Uint32 currentTime = SDL_GetTicks();
         float deltaTime = (currentTime - lastFrameTime) / 1000.0f; // Second
 
@@ -44,6 +45,7 @@ void Game::run()
         }
 
         SDL_Delay(1000 / 60);
+        stillPlaying();
     }
 }
 
@@ -73,21 +75,22 @@ void Game::render()
 void Game::drawLevel(SDL_Renderer *renderer)
 {
     m_paddle.drawPaddle(renderer);
-    m_ball.drawBall(renderer);
+    m_balls.drawBalls(renderer);
     m_bricks.drawBricks(renderer);
     m_bonuses.drawBonuses(renderer);
+    m_gameStatus.drawGameStatus(renderer);
 }
 void Game::update(float deltaTime)
 {
     m_bonuses.update(deltaTime);
     m_paddle.update(deltaTime);
-    m_ball.update(deltaTime, m_paddle, m_bricks, m_bonuses, m_gameStatus);
+    m_balls.update(deltaTime, m_paddle, m_bricks, m_bonuses, m_gameStatus);
 }
 
 void Game::reset()
 {
     m_bonuses.resetBonuses();
-    m_ball.resetBall();
+    m_balls.resetBalls();
     m_paddle.resetPaddle();
     m_bricks.resetBricks();
     m_gameStatus.resetGameStatus();
@@ -95,15 +98,7 @@ void Game::reset()
 
 void Game::handleLevelInput(SDL_Event event)
 {
-    if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-    {
-        m_gameState = GameState::MENU;
-        // reset
-        this->reset();
-        return;
-    }
     m_paddle.handleInput(event, m_window.getWidth());
-    m_ball.handleInput(event);
 }
 
 void Game::handleMenuInput(SDL_Event event)
@@ -143,7 +138,7 @@ void Game::handleMenuInput(SDL_Event event)
 
 void Game::stillPlaying()
 {
-    if ((m_bricks.getTotalBricks() == 0 || m_gameStatus.getLife() == 0) && GameState::LEVEL == m_gameState)
+    if ((m_bricks.getTotalBricks() == 0 || m_gameStatus.getLife() <= 0) && GameState::LEVEL == m_gameState)
     {
         m_gameState = GameState::MENU;
         // reset

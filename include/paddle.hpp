@@ -2,6 +2,7 @@
 #define PADDLE_HPP
 
 #include "SDL2/SDL.h"
+#include "bonus.hpp"
 
 class Paddle
 {

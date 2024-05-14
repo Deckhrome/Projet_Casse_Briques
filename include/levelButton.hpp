@@ -16,7 +16,7 @@ public:
     // Getters
     SDL_Rect getRect() const { return m_rect; }
 
-    SDL_Texture* getTexture() const { return m_texture.get(); }
+    SDL_Texture *getTexture() const { return m_texture.get(); }
 
     int getNumber() const { return m_number; }
 
@@ -25,7 +25,5 @@ private:
     std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> m_texture;
     int m_number;
 };
-
-
 
 #endif // LEVELBUTTON_HPP

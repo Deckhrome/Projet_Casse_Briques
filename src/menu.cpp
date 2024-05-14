@@ -52,13 +52,13 @@ void Menu::drawNumberedButtons()
 }
 
 void Menu::renderText(SDL_Renderer *renderer, const std::string &text, int x, int y, SDL_Color color)
-    {
-        SDL_Surface *surface = TTF_RenderText_Solid(this->m_font, text.c_str(), color);
-        SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
-        int textWidth = surface->w;
-        int textHeight = surface->h;
-        SDL_Rect dstRect = {x, y, textWidth, textHeight};
-        SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
-        SDL_FreeSurface(surface);
-        SDL_DestroyTexture(texture);
-    }
+{
+    SDL_Surface *surface = TTF_RenderText_Solid(this->m_font, text.c_str(), color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, surface);
+    int textWidth = surface->w;
+    int textHeight = surface->h;
+    SDL_Rect dstRect = {x, y, textWidth, textHeight};
+    SDL_RenderCopy(renderer, texture, nullptr, &dstRect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+}
