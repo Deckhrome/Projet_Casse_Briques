@@ -6,7 +6,7 @@
 #include "../include/ball.hpp"
 #include "../include/colour.hpp"
 
-#define VELOCITY 600
+#define VELOCITY 500
 #define RANGE_ANGLE 4
 #define STARTING_ANGLE (M_PI / 4)
 
@@ -102,7 +102,7 @@ void Ball::handleCollisionsBricks(Bricks &bricks, Bonuses &bonuses, GameStatus &
                 // Appear a bonus randomly
                 if (rand() % 1 == 0)
                 {
-                    Bonus bonus(brick.getX() - brick.getWidth() / 2, brick.getY() + brick.getHeight() / 2, 20, 20, rand() % 2);
+                    Bonus bonus(brick.getX() - brick.getWidth() / 2, brick.getY() + brick.getHeight() / 2, 20, 20, rand() % 3);
                     std::cout << "bonus : " << bonus.getType() << std::endl;
                     bonuses.pushBonus(bonus);
                 }
@@ -138,79 +138,6 @@ void Ball::handleCollisionsPaddle(Paddle paddle)
         // Juste in case, the ball will hit just one time
         m_position.y = paddle.getY() - m_radius - 1;
     }
-}
-
-bool Ball::handleCollisionsBonuses(Bonuses &bonuses, Paddle &paddle, GameStatus &gameStatus)
-{
-    // Get all bonuses
-    std::vector<Bonus> &allBonuses = bonuses.getBonuses();
-    // Iterate through all bonuses
-    for (size_t i = 0; i < allBonuses.size(); ++i)
-    {
-        Bonus &bonus = allBonuses[i];
-
-        // Get bonus position and dimensions
-        int bonus_x = bonus.getX();
-        int bonus_y = bonus.getY();
-        int bonus_width = bonus.getWidth();
-        int bonus_height = bonus.getHeight();
-
-        // Get paddle position and dimensions
-        int paddle_x = paddle.getX();
-        int paddle_y = paddle.getY();
-        int paddle_width = paddle.getWidth();
-        int paddle_height = paddle.getHeight();
-
-        // Check collision between paddle and bonus
-        if (paddle_x + paddle_width >= bonus_x &&
-            paddle_x <= bonus_x + bonus_width &&
-            paddle_y + paddle_height >= bonus_y &&
-            paddle_y <= bonus_y + bonus_height &&
-            bonus.isActive())
-        {
-            // Apply bonus effect based on bonus type
-            bonus.setActive(false);
-            switch (bonus.getType())
-            {
-            case 0: // Increase paddle size
-                paddle.setWidth(paddle.getWidth() + 200);
-                std::cout << "paddle width : " << paddle.getWidth() << std::endl;
-                break;
-            case 1: // Duplicate ball
-                // Add a ball to the balls vector
-                return true;
-                break;
-            case 2:                                   // Decrease ball size
-                m_radius = std::max(5, m_radius - 5); // Ensure ball radius doesn't go below 5
-                break;
-            case 3: // Increase life
-                gameStatus.increaseLife();
-                std::cout << "life : " << gameStatus.getLife() << std::endl;
-                break;
-            case 4: // Increase score ratio
-                gameStatus.increaseScoreRatio();
-                break;
-            case 5:                                                     // Increase ball speed
-                m_velocityRatio = std::min(2.0, m_velocityRatio + 0.5); // Ensure ball speed doesn't go above 2.0
-                std::cout << "velocity ratio after increase : " << m_velocityRatio << std::endl;
-                break;
-            case 6:                                     // Increase ball size
-                m_radius = std::min(30, m_radius + 10); // Ensure ball radius doesn't go above 50
-                break;
-            case 7:                                                    // Decrease paddle size
-                paddle.setWidth(std::max(20, paddle.getWidth() - 50)); // Ensure paddle width doesn't go below 20
-                std::cout << "paddle width : " << paddle.getWidth() << std::endl;
-                break;
-            default:
-                break;
-            }
-
-            // Remove the collected bonus
-            std::cout << "Bonus collected" << std::endl;
-            break; // Exit loop after processing collision with one bonus
-        }
-    }
-    return false;
 }
 
 bool Ball::handleCollisionsBorder(int windowWidth, int windowHeight, GameStatus &gameStatus)

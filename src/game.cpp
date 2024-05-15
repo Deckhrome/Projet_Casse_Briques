@@ -83,7 +83,7 @@ void Game::drawLevel(SDL_Renderer *renderer)
 void Game::update(float deltaTime)
 {
     m_bonuses.update(deltaTime);
-    m_paddle.update(deltaTime);
+    m_paddle.update(deltaTime, m_balls, m_bonuses, m_gameStatus);
     m_balls.update(deltaTime, m_paddle, m_bricks, m_bonuses, m_gameStatus);
 }
 

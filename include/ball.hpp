@@ -1,12 +1,12 @@
 #ifndef BALL_HPP
 #define BALL_HPP
 
+#include <SDL2/SDL.h>
 #include "vector2D.hpp"
 #include "paddle.hpp"
 #include "bricks.hpp"
 #include "gameStatus.hpp"
 #include "bonuses.hpp"
-#include <memory> // Inclure la bibliothèque pour std::unique_ptr
 
 class Ball
 {
@@ -25,10 +25,10 @@ public:
     bool handleCollisionsBorder(int windowWidth, int windowHeight, GameStatus &gameStatus);
     void handleCollisionsPaddle(Paddle paddle);
     void handleCollisionsBricks(Bricks &bricks, Bonuses &bonuses, GameStatus &gameStatus);
-    bool handleCollisionsBonuses(Bonuses &bonuses, Paddle &paddle, GameStatus &gameStatus);
 
     // Getters
     int getRadius() const { return m_radius; }
+    float getVelocity() const { return m_velocityRatio; }
     Vector2D getPosition() const { return m_position; }
 
     // Reset position

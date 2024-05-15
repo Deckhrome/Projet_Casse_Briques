@@ -1,8 +1,16 @@
 #ifndef PADDLE_HPP
 #define PADDLE_HPP
 
-#include "SDL2/SDL.h"
+#include <SDL2/SDL.h>
+#include <iostream>
+#include "vector2D.hpp"
 #include "bonus.hpp"
+#include "gameStatus.hpp"
+#include "bonuses.hpp"
+#include "colour.hpp"
+
+class Ball;
+class Balls;
 
 class Paddle
 {
@@ -12,13 +20,16 @@ public:
     ~Paddle() {}
 
     // Update
-    void update(float deltaTime);
+    void update(float deltaTime, Balls &ball, Bonuses &bonuses, GameStatus &gameStatus);
 
     // Draw
     void drawPaddle(SDL_Renderer *renderer) const;
 
     // handleInput
     void handleInput(SDL_Event &event, int screenWidth);
+
+    // handle Collision
+    void handleCollisionsBonuses(Bonuses &bonuses, Balls &ball, GameStatus &gameStatus);
 
     // Getters
     int getWidth() const { return m_width; }

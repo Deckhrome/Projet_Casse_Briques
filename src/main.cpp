@@ -3,8 +3,8 @@
 
 #define SCREEN_WIDTH 948
 #define SCREEN_HEIGHT 525
-#define PADDLE_WIDTH 150
-#define PADDLE_HEIGHT 20
+#define PADDLE_WIDTH 100
+#define PADDLE_HEIGHT 10
 #define BALL_RADIUS 10
 
 int main()

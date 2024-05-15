@@ -57,11 +57,6 @@ public:
             balls[i].updatePosition(deltaTime);
             balls[i].handleCollisionsPaddle(paddle);
             balls[i].handleCollisionsBricks(bricks, bonuses, gameStatus);
-            if (balls[i].handleCollisionsBonuses(bonuses, paddle, gameStatus))
-            {
-                std::cout << "Bonus collision add " << std::endl;
-                addBall(balls[i]);
-            }
             if (balls[i].handleCollisionsBorder(m_screenWidth, m_screenHeight, gameStatus))
             {
                 removeBall(i);
@@ -70,6 +65,24 @@ public:
         if (balls.size() == 0)
         {
             resetBalls();
+        }
+    }
+
+    // Change Radius of all ball
+    void changeRadius(int radius)
+    {
+        for (Ball &ball : balls)
+        {
+            ball.setRadius(radius);
+        }
+    }
+
+    // Change Velocity Ratio of all ball
+    void changeVelocityRatio(float velocityRatio)
+    {
+        for (Ball &ball : balls)
+        {
+            ball.setVelocityRatio(velocityRatio);
         }
     }
 
