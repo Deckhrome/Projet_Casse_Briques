@@ -6,7 +6,10 @@
 #include <SDL2/SDL.h>
 #include "bonus.hpp"
 
-// Define the Bonuses class
+/*
+    Define the Bonuses class to manage multiple bonuses
+*/
+
 class Bonuses
 {
 public:

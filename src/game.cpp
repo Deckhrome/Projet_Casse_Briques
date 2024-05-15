@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 
+// Main game loop
 void Game::run()
 {
     bool running = true;
@@ -49,6 +50,7 @@ void Game::run()
     }
 }
 
+// Render the menu
 void Game::renderMenu()
 {
     m_window.clear();
@@ -56,6 +58,7 @@ void Game::renderMenu()
     m_window.display();
 }
 
+// Render the level
 void Game::renderLevel(Level currentLevel, float deltaTime)
 {
     (void)currentLevel;
@@ -63,6 +66,7 @@ void Game::renderLevel(Level currentLevel, float deltaTime)
     this->render();
 }
 
+// Render the game
 void Game::render()
 {
     m_window.clear();
@@ -72,6 +76,7 @@ void Game::render()
     m_window.display();
 }
 
+// Draw the level
 void Game::drawLevel(SDL_Renderer *renderer)
 {
     m_paddle.drawPaddle(renderer);
@@ -80,6 +85,8 @@ void Game::drawLevel(SDL_Renderer *renderer)
     m_bonuses.drawBonuses(renderer);
     m_gameStatus.drawGameStatus(renderer);
 }
+
+// Update the game
 void Game::update(float deltaTime)
 {
     m_bonuses.update(deltaTime);
@@ -87,6 +94,7 @@ void Game::update(float deltaTime)
     m_balls.update(deltaTime, m_paddle, m_bricks, m_bonuses, m_gameStatus);
 }
 
+// Reset the game
 void Game::reset()
 {
     m_bonuses.resetBonuses();
@@ -96,11 +104,13 @@ void Game::reset()
     m_gameStatus.resetGameStatus();
 }
 
+// Handle the level input
 void Game::handleLevelInput(SDL_Event event)
 {
     m_paddle.handleInput(event, m_window.getWidth());
 }
 
+// Handle the menu input
 void Game::handleMenuInput(SDL_Event event)
 {
     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT)
@@ -136,6 +146,8 @@ void Game::handleMenuInput(SDL_Event event)
     }
 }
 
+
+// Check if the game is still playing
 void Game::stillPlaying()
 {
     if ((m_bricks.getTotalBricks() == 0 || m_gameStatus.getLife() <= 0) && GameState::LEVEL == m_gameState)

@@ -17,15 +17,19 @@
 class Menu
 {
 public:
+    // Constructor
     Menu(SDL_Renderer *renderer, int screenWidth, int screenHeight, SDL_Texture *levelButtonTexture, TTF_Font *font)
         : m_renderer(renderer), m_screenWidth(screenWidth), m_screenHeight(screenHeight), m_levelButtonTexture(levelButtonTexture), m_font(font) { initMenu(); }
 
+    // struct to store the level button
     struct LevelButton
     {
         SDL_Rect rect;
         SDL_Texture *texture;
         int number;
     };
+
+    // Initialize the menu
     void initMenu();
 
     // Adding a level button

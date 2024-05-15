@@ -41,6 +41,7 @@ public:
         SDL_RenderPresent(m_renderer.get());
     }
 
+    // Clear the window
     void clear()
     {
         SDL_SetRenderDrawColor(m_renderer.get(), 0, 0, 0, 255);
@@ -57,7 +58,7 @@ private:
     TTF_Font *m_font;
     SDL_Texture *m_fontTexture;
 
-    // Verification SDL, TTF functions
+    // Verification SDL functions
     void CHK_SDL(bool condition)
     {
         if (!condition)
@@ -66,6 +67,7 @@ private:
             exit(EXIT_FAILURE);
         }
     }
+    // Verification TTF functions
     void CHK_TTF(bool condition)
     {
         if (!condition)

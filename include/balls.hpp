@@ -8,6 +8,10 @@
 #include "gameStatus.hpp"
 #include "bonuses.hpp"
 
+/*
+    Define the Balls class to manage multiple balls
+*/
+
 class Balls
 {
 public:

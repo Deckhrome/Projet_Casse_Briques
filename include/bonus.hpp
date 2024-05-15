@@ -4,6 +4,11 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "colour.hpp"
+
+/*
+    Define the Bonus class to manage a bonus
+*/
+
 enum BonusType
 {
     // Good bonuses
@@ -23,6 +28,8 @@ class Bonus
 public:
     Bonus(int x, int y, int width, int height, int type) : m_x(x), m_y(y), m_width(width), m_height(height), m_type(type) {}
     ~Bonus() {}
+
+    // Draw the bonus depending on its type
     void draw(SDL_Renderer *renderer) const
     {
         SDL_Rect rect = {m_x, m_y, m_width, m_height};
@@ -63,14 +70,15 @@ public:
         SDL_RenderFillRect(renderer, &rect);
     }
 
+    // Update the bonus position
     int update(float deltaTime)
     {
         m_y += 100 * deltaTime;
         return m_y;
     }
 
+    // Check if the bonus is active and set it to false if not
     bool isActive() const { return m_active; }
-
     void setActive(bool active) { m_active = active; }
 
     // Getters

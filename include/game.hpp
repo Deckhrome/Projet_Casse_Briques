@@ -13,12 +13,16 @@
 #include "bonuses.hpp"
 #include "balls.hpp"
 
+
+
+// Define the game states
 enum class GameState
 {
     MENU,
     LEVEL
 };
 
+// Define the levels
 enum class Level
 {
     DEFAULT_LEVEL,
@@ -26,6 +30,10 @@ enum class Level
     LEVEL_2,
     LEVEL_3
 };
+
+/*
+    Define the Game class to manage the game
+*/
 
 class Game
 {
@@ -39,6 +47,7 @@ public:
                                                                                                   m_level(Level::LEVEL_1),
                                                                                                   m_menu(m_window.getRenderer(), screenWidth, screenHeight, m_window.getButtonTexture(), m_window.getFont()),
                                                                                                   m_gameStatus(m_window.getFont(), screenWidth, screenHeight) {}
+    ~Game() {}
     void run();
     void stillPlaying();
     void drawLevel(SDL_Renderer *renderer);

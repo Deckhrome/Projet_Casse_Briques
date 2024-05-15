@@ -10,6 +10,10 @@
 #define INITIAL_SCORE 0
 #define INITIAL_SCORE_RATIO 1
 
+/*
+    Define the GameStatus class to manage the game status
+*/
+
 class GameStatus
 {
 private:

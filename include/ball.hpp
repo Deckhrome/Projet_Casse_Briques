@@ -14,11 +14,13 @@ public:
     // Constructeur
     Ball(int radius, int initialX, int initialY, int screenWidth, int screenHeight);
 
-    void updatePosition(float deltaTime)
-    {
-        m_position = m_position + m_velocity * deltaTime * m_velocityRatio;
-    }
+    // Update position of the ball
+    void updatePosition(float deltaTime){ m_position = m_position + m_velocity * deltaTime * m_velocityRatio;}
+
+    // Draw the ball
     void drawBall(SDL_Renderer *renderer) const;
+
+    // Handle input
     void handleInput(SDL_Event &event);
 
     // Handle every type of collision

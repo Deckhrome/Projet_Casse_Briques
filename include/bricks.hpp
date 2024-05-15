@@ -47,28 +47,15 @@ public:
         }
     }
 
-    void setBrickDurability(size_t index, int newDurability)
-    {
-        m_all_bricks[index].setDurability(newDurability);
-    }
+    // Set brick durability
+    void setBrickDurability(size_t index, int newDurability) { m_all_bricks[index].setDurability(newDurability);}
 
     // Number of brick
-    int getTotalBricks() const
-    {
-        return m_all_bricks.size();
-    }
+    int getTotalBricks() const { return m_all_bricks.size();}
 
-    // Get brick
-    Brick &getBrick(int index)
-    {
-        return m_all_bricks[index];
-    }
-
-    // Get all bricks
-    const std::vector<Brick> &getAllBricks() const
-    {
-        return m_all_bricks;
-    }
+    // Getters
+    Brick &getBrick(int index){ return m_all_bricks[index]; }
+    const std::vector<Brick> &getAllBricks() const { return m_all_bricks; }
 };
 
 #endif // BRICKS_HPP

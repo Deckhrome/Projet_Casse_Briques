@@ -20,13 +20,12 @@ public:
     }
 
     // Getters
-    int getDurability() const
-    {
-        return m_durability;
-    }
+    int getDurability() const { return m_durability;}
 
+    // Set the durability (useful for the game to decrease the durability)
     void setDurability(int newDurability) { m_durability = newDurability; }
 
+    // Getters
     int getX() const { return m_x; }
     int getY() const { return m_y; }
     int getWidth() const { return m_width; }
