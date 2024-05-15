@@ -5,20 +5,16 @@ Bonuses::Bonuses(int screenWidth, int screenHeight) : m_screenWidth(screenWidth)
 
 void Bonuses::update(float deltaTime)
 {
-    // m_all_bonuses.erase(std::remove_if(m_all_bonuses.begin(), m_all_bonuses.end(), [](const Bonus &bonus)
-    //                                    { return !bonus.isActive(); }),
-    //                     m_all_bonuses.end());
-    for (size_t i = 0; i < m_all_bonuses.size(); i++)
-    {
-        if (m_all_bonuses[i].update(deltaTime) >= m_screenHeight)
-        {
-            removeBonus(i);
-        }
-        if (!m_all_bonuses[i].isActive())
-        {
-            removeBonus(i);
-        }
-    }
+    m_all_bonuses.erase(
+        std::remove_if(
+            m_all_bonuses.begin(), 
+            m_all_bonuses.end(), 
+            [this, deltaTime](Bonus &bonus) {
+                return (!bonus.isActive() || (bonus.update(deltaTime) >= m_screenHeight));
+            }
+        ), 
+        m_all_bonuses.end()
+    );
 }
 
 void Bonuses::drawBonuses(SDL_Renderer *renderer) const

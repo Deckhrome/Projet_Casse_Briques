@@ -98,17 +98,16 @@ void Ball::handleCollisionsBricks(Bricks &bricks, Bonuses &bonuses, GameStatus &
             //  Don't loop on the last bricks
             if (brick.getDurability() <= 0)
             {
-                bricks.removeBrick(i);
                 // Appear a bonus randomly
-                if (rand() % 1 == 0)
+                if (rand() % 4 == 0)
                 {
-                    Bonus bonus(brick.getX() - brick.getWidth() / 2, brick.getY() + brick.getHeight() / 2, 20, 20, rand() % 3);
+                    Bonus bonus(brick.getX() + brick.getWidth() / 2, brick.getY() + brick.getHeight() / 2, 20, 20, rand() % 7);
                     std::cout << "bonus : " << bonus.getType() << std::endl;
                     bonuses.pushBonus(bonus);
                 }
+                bricks.removeBrick(i);
             }
-
-            break;
+            return;
         }
     }
 }

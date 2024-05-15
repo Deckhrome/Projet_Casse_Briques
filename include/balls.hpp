@@ -52,6 +52,11 @@ public:
     void update(float deltaTime, Paddle paddle, Bricks &bricks, Bonuses &bonuses, GameStatus &gameStatus)
     {
         size_t size = balls.size();
+        if (size == 0)
+        {
+            resetBalls();
+            return;
+        }
         for (size_t i = 0; i < size; i++)
         {
             balls[i].updatePosition(deltaTime);
@@ -60,11 +65,8 @@ public:
             if (balls[i].handleCollisionsBorder(m_screenWidth, m_screenHeight, gameStatus))
             {
                 removeBall(i);
+                std::cout << "Remove ball :" << i << std::endl;
             }
-        }
-        if (balls.size() == 0)
-        {
-            resetBalls();
         }
     }
 

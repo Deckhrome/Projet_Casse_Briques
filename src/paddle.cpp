@@ -100,6 +100,7 @@ void Paddle::handleCollisionsBonuses(Bonuses &bonuses, Balls &balls, GameStatus 
             case 1: // Duplicate ball
                 // Add a ball to the balls vector
                 balls.addBall(balls.getBall(0));
+                std::cout << "Num ball :" << balls.getNumBalls() << std::endl;
                 break;
             case 2:                                                                // Decrease ball size
                 balls.changeRadius(std::max(5, balls.getBall(0).getRadius() - 5)); // Ensure ball radius doesn't go below 5

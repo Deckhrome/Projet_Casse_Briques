@@ -6,7 +6,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "colour.hpp"
 
-#define INITIAL_LIFE 999999999
+#define INITIAL_LIFE 5
 #define INITIAL_SCORE 0
 #define INITIAL_SCORE_RATIO 1
 
